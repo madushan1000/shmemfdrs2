@@ -44,7 +44,7 @@ pub fn create_shmem<T: AsRef<CStr>>(name: T) -> io::Result<File> {
         }
     }
 
-    Ok(File::from(fd))
+    Ok(fd)
 }
 
 unsafe fn make_fd(fd: libc::c_int) -> io::Result<File> {
