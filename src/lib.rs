@@ -13,7 +13,7 @@ use std::os::fd::FromRawFd;
 pub fn create_shmem<T: AsRef<CStr>>(name: T) -> io::Result<File> {
     let fd;
 
-    #[cfg(target_os = "linux")]
+    #[cfg(any(target_os = "linux", target_os = "android"))]
     unsafe {
         fd = make_fd(libc::memfd_create(
             name.as_ref().as_ptr(),
@@ -31,7 +31,7 @@ pub fn create_shmem<T: AsRef<CStr>>(name: T) -> io::Result<File> {
         ))?;
     }
 
-    #[cfg(not(any(target_os = "freebsd", target_os = "linux")))]
+    #[cfg(not(any(target_os = "freebsd", target_os = "linux", target_os = "android")))]
     unsafe {
         fd = make_fd(libc::shm_open(
             name.as_ref().as_ptr(),
